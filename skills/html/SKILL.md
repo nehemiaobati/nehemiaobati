@@ -1,30 +1,43 @@
-# Agent Skill: UX/UI Design & Bootstrap 5.3+ Engineering Standard
-
-* **Role:** Principal Product Designer & Front-End Systems Architect
-* **Stack:** HTML5, Bootstrap 5.3+ (Strict: native Bootstrap components, utility classes, JS APIs, and `--bs-*` / `--theme-*` CSS custom properties ONLY)
-* **Brand Palette:** White (`#FFFFFF` / `#F8F9FA`), Black (`#0A0A0D` / `#141419`), Blue (`#0057FF` / `#3B82F6`)
-* **Scope:** Framework- and backend-agnostic. Applies unconditionally to all markup, styles, layouts, interactive flows, and client-side scripts.
-* **Normative Language (RFC 2119):** `MUST`, `MUST NOT`, `REQUIRED`, `SHALL`, `SHALL NOT`, `MAY`, `FORBIDDEN`.
-
+---
+name: ux-ui-bootstrap5-architect
+description: End-to-end UX/UI design and front-end engineering standard for HTML5 and Bootstrap 5.3+ using a White, Black, and Blue brand palette.
+version: 1.0.0
+stack:
+  - HTML5
+  - Bootstrap 5.3+
+  - Vanilla ES6+ JavaScript
+brand_palette:
+  white: "#FFFFFF"
+  black: "#0A0A0D"
+  blue: "#0057FF"
 ---
 
-## 1. Core Mandate & Prohibitions
+# UX/UI Design & Bootstrap 5.3+ Engineering Skill
 
-1. **Intent Before Aesthetics:** Every interface MUST be derived from primary user intent, secondary browsing intent, and failure/edge cases before visual styling is applied.
-2. **Respect Mental Models:** Primary navigation MUST anchor at the top (`navbar`), content MUST flow top-to-bottom and left-to-right, and primary Calls-to-Action (CTAs) MUST remain high-contrast and immediately discoverable in the top-right header and hero region.
-3. **Strict Bootstrap 5.3+ Boundary:**
-   * All layout, spacing, color, elevation, and interaction patterns MUST use native Bootstrap 5.3+ classes and components (`.container`, `.row`, `.col-*`, `.vstack`, `.hstack`, `.gap-*`, `.form-floating`, `.btn-*`, `.card`, `.nav-pills`, `.offcanvas`, `.modal`, `.toast`, `.tooltip`, `.badge`, `.alert`, `.pagination`).
-   * Custom component CSS classes, inline `style=""` attributes, hardcoded hex colors inside HTML, third-party CSS frameworks, and external runtime CDNs are **FORBIDDEN**.
-   * Stylesheets MUST contain ONLY `:root` / `[data-bs-theme]` `--bs-*` / `--theme-*` CSS variable mappings and `:focus-visible` rules, loaded via self-hosted assets or CSP-nonce-protected `<style>` blocks.
-4. **Zero Fallbacks & Zero Silent Errors:** Client-side logic MUST NOT swallow exceptions silently or mask missing required DOM targets. Operations MUST succeed deterministically or surface explicit feedback.
+## 1. Scope, Compliance & Normative Rules
+
+* **Universal Scope:** This specification applies unconditionally to every layout, component, stylesheet, template, form, overlay, and client-side script.
+* **Domain & Stack Agnosticism:** All patterns MUST remain backend- and domain-agnostic. Examples use generic placeholders (`[BrandName]`, `[Domain]`, `[Entity]`, `[Route]`, `[AssetPath]`).
+* **Deterministic Language (RFC 2119):** Specifications use ONLY `MUST`, `MUST NOT`, `REQUIRED`, `SHALL`, `SHALL NOT`, `MAY`, `FORBIDDEN`.
+* **Strict Bootstrap 5.3+ Boundary:**
+  * All UI structures, spacing, typography, states, and themes MUST use native Bootstrap 5.3+ components, utility classes, CSS custom properties (`--bs-*`), and native `bootstrap.*` JavaScript APIs.
+  * Custom component CSS classes, inline `style=""` attributes, inline `on*` JS event attributes, third-party CSS frameworks, hardcoded hex colors in HTML, and external runtime CDN links are **FORBIDDEN**.
+  * Stylesheets MUST contain ONLY `:root` / `[data-bs-theme]` `--bs-*` and `--theme-*` variable mappings plus `:focus-visible` accessibility rules.
+* **Zero Fallbacks & Zero Silent Errors:** Client-side scripts MUST NOT mask missing required DOM elements with silent fallbacks or swallow exceptions in empty `catch` blocks. Operations MUST complete deterministically or surface explicit error states.
 
 ---
 
 ## 2. Brand & Semantic Color System (White / Black / Blue)
 
-Blue MUST serve as the sole primary brand hue for interactive focus, links, and primary CTAs. Semantic colors (`success`, `danger`, `warning`) are **FORBIDDEN** for decoration and MUST be used strictly as state signifiers (`success` = completion/valid, `danger` = error/destructive, `warning` = caution/non-blocking alert).
+### 2.1 Color Discipline
 
-### Mandatory CSS Token Mapping (`[data-bs-theme="light" | "dark"]`)
+* **Single Brand Hue:** Blue (`#0057FF` light / `#3B82F6` dark) MUST serve as the sole primary hue for interactive focus, links, active metrics, and primary Calls-to-Action (CTAs).
+* **Monochrome Surfaces:** White (`#FFFFFF`, `#F8F9FA`, `#F1F3F5`) and Black (`#0A0A0D`, `#121217`, `#1A1A22`) MUST form all canvas, card, and ink layers.
+* **Semantic Colors Only for State:** `success`, `danger`, and `warning` tokens are **FORBIDDEN** for decorative styling and MUST signify system state exclusively (`success` = valid/completed, `danger` = error/destructive, `warning` = caution/non-blocking alert).
+
+### 2.2 Mandatory CSS Variable Mapping
+
+Place inside the self-hosted theme stylesheet or CSP-nonced layout `<style>` block:
 
 ```css
 :root,
@@ -71,6 +84,10 @@ Blue MUST serve as the sole primary brand hue for interactive focus, links, and 
   --bs-secondary-color: rgba(248, 249, 250, 0.62);
   --bs-border-color: rgba(248, 249, 250, 0.1);
 
+  --bs-link-color: #60a5fa;
+  --bs-link-hover-color: #93c5fd;
+  --bs-focus-ring-color: rgba(59, 130, 246, 0.35);
+
   --bs-box-shadow-sm: none;
   --bs-box-shadow: 0 0 0 1px rgba(248, 249, 250, 0.08);
   --bs-box-shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.55);
@@ -92,95 +109,93 @@ Blue MUST serve as the sole primary brand hue for interactive focus, links, and 
 }
 ```
 
-### Theme & Elevation Rules
+### 2.3 Dual-Theme, Surface & Shadow Rules
 
-* **Opacity-Based Hierarchy:** Primary labels MUST use `text-body`; secondary metadata MUST use `text-body-secondary` (~62% contrast), including when adjacent font sizes are identical.
+* **Opacity Hierarchy:** Primary labels MUST use `text-body`; supporting labels and timestamps MUST use `text-body-secondary` (~62% contrast), including when font sizes are identical.
 * **Dark Mode (`data-bs-theme="dark"`):**
-  * High-contrast bright borders around cards are **FORBIDDEN**. Cards MUST use `border` (`--bs-border-color`) and achieve depth by stepping surfaces lighter than canvas (`bg-body-tertiary` cards over `bg-body` / `bg-body-secondary`).
-  * Status badges MUST use desaturated subtle tokens: `bg-primary-subtle text-primary-emphasis border border-primary-subtle` (or `success` / `danger` / `warning` equivalents).
-* **Light Mode Shadows:** Drop shadows MUST NOT dominate visual attention. Resting cards MUST use `shadow-sm` or `shadow-none border`; `shadow-lg` is reserved exclusively for elevated overlays (`dropdown-menu`, `popover`, `modal`, `toast`).
+  * High-contrast white borders on cards are **FORBIDDEN**. Cards MUST use `border` (`--bs-border-color`) and create depth via lighter surface stepping (`bg-body-tertiary` cards over `bg-body` or `bg-body-secondary`).
+  * Status chips/badges MUST use desaturated subtle utilities: `.badge.bg-{variant}-subtle.text-{variant}-emphasis.border.border-{variant}-subtle`.
+  * Heavy drop shadows in dark mode are **FORBIDDEN**.
+* **Light Mode Shadows (`data-bs-theme="light"`):**
+  * Drop shadows MUST NOT be the first noticed visual element. Resting cards MUST use `shadow-sm border`; `shadow-lg` is reserved exclusively for floating overlays (`dropdown-menu`, `popover`, `modal`, `toast`).
 
 ---
 
-## 3. Typography & Scale Rules
+## 3. Typography & Hierarchy Scale
 
-* **Single Font Family:** Layouts MUST use one sans-serif font stack (`--bs-font-sans-serif`). Mixing multiple font families is **FORBIDDEN**.
-* **Scale Cap (Max 6 Levels):** Any single view MUST NOT exceed 6 distinct font sizes.
-* **Context-Locked Scales:**
-  * **Marketing / Landing Pages:** Hero `h1` via `.display-4`–`.display-5` (`fw-bold lh-1`), section headings `h2`–`h3`, body `fs-6` (`1rem`), captions `small` (`0.875rem`).
-  * **High-Density Dashboards / Tables:** `h1` MUST NOT exceed `fs-4` (`1.5rem` / `24px`); `h2` `fs-5` (`20px`); `h3` `fs-6` (`16px`); metadata `small` (`0.875rem` / `14px`).
+* **Single Font Stack:** All UI MUST use Bootstrap's single sans-serif stack (`--bs-font-sans-serif`). Mixing multiple font families is **FORBIDDEN**.
+* **Six-Size Maximum:** Any single view MUST NOT exceed 6 distinct font sizes.
+* **Scale by Information Density:**
+  * **Marketing / Landing Pages:** Hero heading via `.display-4`–`.display-5.fw-bold.lh-1`; section titles `h2`–`h3`; body `fs-6`; metadata `small`.
+  * **Dashboards / Dense Workspaces:** `h1` MUST NOT exceed `fs-4` (`1.5rem` / `24px`); `h2` `fs-5`; `h3` `fs-6`; metadata `small`.
+* **Copy Conciseness:** Hero headlines MUST NOT exceed 7 words; hero subtext MUST NOT exceed 14 words.
 
 ---
 
-## 4. Grid, Spacing & Proximity Architecture
+## 4. 4pt Grid, Spacing & Proximity Rules
 
-All spacing MUST adhere to Bootstrap's 4pt-compatible scale (`-1` = `0.25rem`/4px, `-2` = `0.5rem`/8px, `-3` = `1rem`/16px, `-4` = `1.5rem`/24px, `-5` = `3rem`/48px).
+All layout spacing MUST use Bootstrap's 4pt-compatible scale (`-1` = `4px`, `-2` = `8px`, `-3` = `16px`, `-4` = `24px`, `-5` = `48px`).
 
-### Proximity Grouping Rules
+### 4.1 Proximity Grouping
 
 1. **Tightly Coupled (`gap-2` / `mb-2` — `8px`):** Heading to subtext; icon to label; entity title to timestamp.
-2. **Eyebrow Separation (`mb-3` — `16px`):** Status badge/pill above a primary heading.
-3. **Action Separation (`mt-4` — `24px`):** Text block to CTA button group (`hstack gap-2 mt-4`).
-4. **Layout Grids:**
-   * Repeating collections (catalog cards, dashboards, bento feature grids) MUST use Bootstrap's 12-column grid (`row g-4` with `col-12 col-md-6 col-xl-4`).
-   * Hero sections MUST prioritize whitespace (`py-5 my-lg-4`) over artificial column density.
+2. **Eyebrow Separation (`mb-3` — `16px`):** Status badge above a heading.
+3. **Action Separation (`mt-4` — `24px`):** Copy block to CTA button group (`.hstack.gap-2.mt-4`).
+4. **Section Whitespace:** Major vertical sections MUST preserve generous breathing room (`py-5`).
+
+### 4.2 Grid Allocation
+
+* **Structured Repeating Content:** Galleries, catalogs, dashboards, and multi-feature bento grids MUST use Bootstrap 12-column grids (`.row.g-4` with `.col-12.col-md-6.col-xl-4`).
+* **Custom Hero Layouts:** Hero regions MUST prioritize whitespace and visual balance over rigid 12-column alignment of decorative assets.
 
 ---
 
-## 5. UX Patterns & Native Bootstrap 5.3+ Mappings
+## 5. UX Architecture & Component Patterns
 
-### A. Affordances & Signifiers
+### 5.1 Mental Models & User Intent
 
-* **Segmented Controls:** MUST use `nav nav-pills bg-body-tertiary p-1 rounded-pill d-inline-flex`. Active option MUST use `nav-link active rounded-pill`; inactive options MUST use `nav-link text-body-secondary`; disabled options MUST use `nav-link disabled opacity-50`.
-* **Buttons & Icons:**
-  * Buttons MUST preserve a **2:1 horizontal-to-vertical padding ratio** using Bootstrap native `.btn` (`py-2 px-3` or `.btn-lg`).
-  * Primary vs Secondary CTA pairs MUST use `.hstack.gap-2` with `.btn.btn-primary` paired with `.btn.btn-outline-secondary` (or `.btn.btn-link.text-decoration-none.text-body` for ghost actions).
-  * Icon dimensions MUST match adjacent text `line-height` (`width="20" height="20"` or `24x24` inline SVG with `aria-hidden="true"`).
-  * Icon-only buttons MUST declare `aria-label` and initialize `bootstrap.Tooltip`.
+1. **Intent-First Structure:** Views MUST prioritize the user's primary task first (e.g., search/action bar) and secondary browsing intent second (e.g., filter pills + listing grid). Functionality MUST expand only as user intent expands.
+2. **Reading Flow:** Content MUST flow top-to-bottom and left-to-right. Top navigation MUST use `header.navbar.navbar-expand-lg.sticky-top.bg-body.border-bottom` with `<= 5` links and one primary `btn-primary` CTA on the right. Overflow links MUST move into `offcanvas.offcanvas-end`.
+3. **Explicit Pagination Over Infinite Scroll:** Multi-page collections MUST render either an explicit `<button type="button" class="btn btn-outline-secondary">` ("Load more" with loading state) or Bootstrap `.pagination.pagination-sm.justify-content-center.flex-wrap.mb-0` so users retain control and can reach `<footer>`.
 
-### B. Entity Cards (No Spreadsheet Tables)
+### 5.2 Affordances, Signifiers & Buttons
 
-Rendering single-entity summary cards as two-column `Label: Value` tables is **FORBIDDEN**. Entity cards MUST follow this structural hierarchy:
+* **Segmented Controls:** MUST use `.nav.nav-pills.bg-body-tertiary.p-1.rounded-pill.d-inline-flex`. Active tabs MUST carry `.active.rounded-pill`; disabled tabs MUST carry `.disabled.opacity-50`.
+* **Button Padding & Pairing:** Buttons MUST maintain a **2:1 horizontal-to-vertical padding ratio** via native `.btn` (`.px-3.py-2` or `.btn-lg`). Primary + secondary CTA pairs MUST use `.hstack.gap-2` combining `.btn.btn-primary` with `.btn.btn-outline-secondary` (or `.btn.btn-link.text-decoration-none.text-body` for ghost actions).
+* **Icon Sizing:** Inline SVG icons MUST match the adjacent text `line-height` (`width="20" height="20"` or `24x24` with `aria-hidden="true"`).
+* **Icon-Only Controls:** Every icon-only button MUST define `aria-label`, `data-bs-toggle="tooltip"`, and `data-bs-title`.
 
-1. **Header (`hstack gap-3 align-items-center`):** Thumbnail/icon container (`rounded-3 bg-body-secondary p-2`) + `vstack` (Bold Title `fw-semibold text-truncate` + Timestamp `small text-body-secondary`) + Right-aligned metric (`ms-auto fw-bold text-primary`).
-2. **Body:** Visual relationship indicators (`border-start ps-3 vstack gap-2`) instead of redundant key-label strings.
-3. **Footer (`hstack gap-2 justify-content-end`):** Primary action (`btn-primary`) + Secondary action (`btn-outline-secondary`).
+### 5.3 Entity Cards (Spreadsheet Layout Prohibited)
 
-### C. Hero Section Anatomy (4 Mandatory Zones)
+Rendering entity summary cards as two-column `Label: Value` key-value tables is **FORBIDDEN**. Entity cards MUST follow this hierarchy:
 
-1. **Navbar (`header.navbar.navbar-expand-lg.sticky-top.bg-body.border-bottom`):** `<= 5` top-level nav links; right-aligned primary CTA (`btn-primary`); overflow navigation moved into Bootstrap `offcanvas`.
-2. **Text Block:** Optional eyebrow badge (`badge bg-primary-subtle text-primary-emphasis rounded-pill`) + Heading (`<= 7 words`) + Subtext (`<= 14 words`, `text-body-secondary`) + CTA pair (`hstack gap-2 mt-4`).
-3. **Stats Strip (Optional):** 3-column grid separated by `border-start`, uniform font size (`small`), differentiated strictly by `fw-semibold text-body` vs `text-body-secondary`.
-4. **Focal Visual:** Clean, unobstructed subject. Text MUST NOT overlap bright or high-frequency focal subjects.
+1. **Header (`.hstack.gap-3.align-items-center`):** Square icon/thumbnail box (`.rounded-3.bg-body-secondary.p-2`) + `.vstack` (Bold truncated title `.fw-semibold.text-truncate` + muted subtitle `.small.text-body-secondary`) + Right-aligned metric (`.ms-auto.fw-bold.text-primary`).
+2. **Body:** Structural grouping via `.border-start.ps-3.vstack.gap-2` for related metadata (e.g., origin/destination).
+3. **Footer (`.hstack.gap-2.justify-content-end`):** Primary + secondary actions.
 
-### D. Image Overlays & Edge-Case Resilience
+### 5.4 Image Overlays & Edge-Case Resilience
 
-* **Contrast Scrims:** Placing raw text directly over photography is **FORBIDDEN**. Text inside `.card-img-overlay` MUST reside inside a native Bootstrap dark surface block (`mt-auto p-3 p-md-4 bg-dark bg-opacity-75 text-white rounded-bottom`) ensuring WCAG AA legibility.
-* **Floating Overlay Icons:** Action icons over bright listing images MUST sit inside `.bg-dark.bg-opacity-75.text-white.rounded-circle.p-2`.
-* **Long-String Protection:** Dynamic titles MUST apply `.text-truncate` so variable-length data never breaks card alignment.
-
-### E. Progressive Disclosure & Pagination
-
-* **Condensing Navigation/Search:** Multi-input filters or secondary navigation MUST condense cleanly into Bootstrap `Collapse`, `Modal`, or `Offcanvas` at smaller viewports or scrolled states.
-* **Explicit Pagination Over Infinite Scroll:** Large collections MUST use an explicit `<button class="btn btn-outline-secondary">` ("Load more") or Bootstrap `.pagination.pagination-sm.justify-content-center.flex-wrap.mb-0` (with `.page-item.active` `aria-current="page"` and `.page-item.disabled`) so users retain control and can reach `<footer>`.
+* **Directional Contrast Scrim:** Placing unbacked text directly over photography or flat dark full-card overlays is **FORBIDDEN**. Text inside `.card-img-overlay` MUST sit inside `.mt-auto.p-3.p-md-4.bg-dark.bg-opacity-75.text-white.rounded-bottom` (parent `.card-img-overlay.d-flex.flex-column.p-0`).
+* **Overlay Action Icons:** Floating action icons over bright images MUST sit inside `.bg-dark.bg-opacity-75.text-white.rounded-circle.p-2`.
+* **Truncation:** Variable-length dynamic titles and subtitles MUST apply `.text-truncate` to prevent layout breaks.
 
 ---
 
-## 6. Interaction Feedback & Required States
+## 6. Mandatory Interaction States & Multi-Step UX Flows
 
-Every user interaction MUST produce immediate, deterministic visual feedback.
+### 6.1 Five Button States
 
-### Mandatory 5 Button States
+Every interactive button MUST support:
 
 1. **Default:** `.btn-primary`, `.btn-outline-secondary`, or `.btn-outline-danger` / `.btn-danger`.
-2. **Hover:** Native Bootstrap `--bs-btn-hover-*` state.
-3. **Active / Pressed:** Native Bootstrap `--bs-btn-active-*` state.
-4. **Disabled:** `disabled` attribute (`aria-disabled="true"` on links).
-5. **Loading:** Set `btn.disabled = true` and render a DOM-constructed `<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>` alongside status text (`Saving...` / `Loading...`).
+2. **Hover:** Native `--bs-btn-hover-*`.
+3. **Active / Pressed:** Native `--bs-btn-active-*`.
+4. **Disabled:** `disabled` attribute (`aria-disabled="true"` on anchors).
+5. **Loading:** `disabled` attribute + DOM-injected `<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>`.
 
-### Mandatory 5 Form Input States
+### 6.2 Five Form Input States
 
-All forms MUST use `.form-floating` (or explicit `.form-label` + `.form-control`) and native validation classes:
+Forms MUST use `.form-floating` (or `.form-label` + `.form-control` / `.form-select`) and support:
 
 1. **Default:** `.form-control`
 2. **Focus:** `.form-control.focus-ring`
@@ -188,47 +203,243 @@ All forms MUST use `.form-floating` (or explicit `.form-label` + `.form-control`
 4. **Warning (Non-blocking):** `.form-control.border-warning` + `<div class="form-text text-warning-emphasis">`
 5. **Valid:** `.form-control.is-valid` + `<div class="valid-feedback">`
 
-Form submission button groups MUST use `.hstack.gap-2.justify-content-end` (`btn-outline-secondary` Cancel + `btn-primary` Submit). Flash/status alerts MUST use `.alert.alert-{success|danger}.alert-dismissible.fade.show`.
+Form submission groups MUST use `.hstack.gap-2.justify-content-end` (`btn-outline-secondary` Cancel + `btn-primary` Submit).
+
+### 6.3 Multi-Step Flows & Conditional Branching
+
+1. **Progress Bar:** Multi-step journeys MUST display `.progress` with `role="progressbar"` and updated `aria-valuenow`.
+2. **Escape Hatch:** Registration/onboarding steps MUST include a secondary escape link (`Already have an account?` -> `[LoginRoute]`).
+3. **Branching Logic:** Qualifying fields (e.g., `team_size`) MUST deterministically branch subsequent views (`team_size > 1` -> Invite Team step -> Workspace; `team_size === 1` -> Workspace directly).
 
 ---
 
-## 7. Multi-Step UX Flow Architecture
+## 7. Plug-and-Play HTML5 & Bootstrap 5.3+ Reference Templates
 
-1. **Progress Signifier:** Multi-step flows MUST render a Bootstrap `.progress` bar (`role="progressbar"`, `aria-valuenow`, `aria-valuemin="0"`, `aria-valuemax="100"`).
-2. **Escape Hatch:** Onboarding/registration views MUST include an explicit secondary route (`Already have an account?` -> `Log in`).
-3. **Verification Friction:** Systems MUST explicitly enforce either blocking verification (`disabled` Continue button until verified) or soft verification (clickable Continue with `.alert-warning` reminder).
-4. **Conditional Branching:** Qualifying attributes (e.g., `team_size`) MUST deterministically branch subsequent steps (`team_size > 1` -> Invite Team step -> Workspace; `team_size === 1` -> Workspace directly).
+### 7.1 HTML5 Document Shell (Dual-Theme, SEO, JSON-LD & CSRF-Ready)
+
+```html
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="csrf-token" content="[CSRF_TOKEN]">
+  <meta name="csrf-header" content="[CSRF_HEADER]">
+  <title>[PageTitle]</title>
+  <meta name="description" content="[MetaDescription]">
+  <meta name="keywords" content="[MetaKeywords]">
+  <meta name="robots" content="[RobotsTag]">
+  <link rel="canonical" href="[CanonicalUrl]">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="[PageTitle]">
+  <meta property="og:description" content="[MetaDescription]">
+  <meta property="og:url" content="[CanonicalUrl]">
+  <meta property="og:image" content="[MetaImage]">
+  <link rel="stylesheet" href="[AssetPath]/vendor/bootstrap/css/bootstrap.min.css">
+  <style nonce="[CSP_STYLE_NONCE]">
+    /* Insert Section 2.2 Mandatory CSS Variable Mapping here */
+  </style>
+</head>
+<body class="bg-body text-body min-vh-100 d-flex flex-column">
+
+  <header class="navbar navbar-expand-lg sticky-top bg-body border-bottom">
+    <nav class="container" aria-label="Primary navigation">
+      <a class="navbar-brand fw-bold" href="[HomeRoute]">[BrandName]</a>
+      <div class="d-flex align-items-center gap-2 ms-auto order-lg-3">
+        <button id="themeToggle" type="button" class="btn btn-outline-secondary btn-sm" aria-pressed="false" aria-label="Toggle color theme">Theme</button>
+        <a href="[PrimaryActionRoute]" class="btn btn-primary btn-sm px-3">[PrimaryAction]</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#primaryOffcanvas" aria-controls="primaryOffcanvas" aria-label="Open menu">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+      </div>
+      <div class="offcanvas offcanvas-end" tabindex="-1" id="primaryOffcanvas" aria-labelledby="primaryOffcanvasLabel">
+        <div class="offcanvas-header border-bottom">
+          <h2 class="h5 offcanvas-title mb-0" id="primaryOffcanvasLabel">[BrandName]</h2>
+          <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+          <ul class="navbar-nav me-auto gap-lg-2">
+            <li class="nav-item"><a class="nav-link" href="[RouteA]">[NavItemA]</a></li>
+            <li class="nav-item"><a class="nav-link" href="[RouteB]">[NavItemB]</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <main class="flex-grow-1">
+    <!-- Flash Alert Slot -->
+    <div class="container pt-4">
+      <div class="alert alert-success alert-dismissible fade show d-none" role="alert" id="statusAlert">
+        <span id="statusAlertMessage"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    </div>
+    <!-- Section Content -->
+  </main>
+
+  <footer class="bg-body-secondary border-top py-4 mt-auto">
+    <div class="container d-flex flex-column flex-sm-row justify-content-between align-items-center gap-2 small text-body-secondary">
+      <span>&copy; [Year] [BrandName]</span>
+      <span>[FooterLinks]</span>
+    </div>
+  </footer>
+
+  <!-- Global Feedback Toast Container -->
+  <div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <div id="feedbackToast" class="toast shadow-lg border" role="status" aria-live="polite" aria-atomic="true">
+      <div class="toast-header">
+        <strong class="me-auto text-body">[BrandName]</strong>
+        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+      </div>
+      <div id="feedbackToastBody" class="toast-body"></div>
+    </div>
+  </div>
+
+  <script src="[AssetPath]/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+```
+
+### 7.2 4-Zone Hero Pattern
+
+```html
+<section class="py-5 border-bottom">
+  <div class="container py-lg-4">
+    <div class="row align-items-center g-5">
+      <div class="col-12 col-lg-6">
+        <span class="badge bg-primary-subtle text-primary-emphasis border border-primary-subtle rounded-pill mb-3">[EyebrowTag]</span>
+        <h1 class="display-5 fw-bold lh-1 mb-2">[SevenWordsOrFewerHeadline]</h1>
+        <p class="lead fs-6 text-body-secondary mb-0">[FourteenWordsOrFewerSupportingSummary]</p>
+        <div class="hstack gap-2 mt-4">
+          <a href="[PrimaryRoute]" class="btn btn-primary px-4 py-2">[PrimaryAction]</a>
+          <a href="[SecondaryRoute]" class="btn btn-outline-secondary px-4 py-2">[SecondaryAction]</a>
+        </div>
+        <div class="row g-3 mt-5 pt-4 border-top">
+          <div class="col-4">
+            <div class="small fw-semibold text-body">[MetricA]</div>
+            <div class="small text-body-secondary">[MetricLabelA]</div>
+          </div>
+          <div class="col-4 border-start">
+            <div class="small fw-semibold text-body">[MetricB]</div>
+            <div class="small text-body-secondary">[MetricLabelB]</div>
+          </div>
+          <div class="col-4 border-start">
+            <div class="small fw-semibold text-body">[MetricC]</div>
+            <div class="small text-body-secondary">[MetricLabelC]</div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-lg-6">
+        <div class="card overflow-hidden border shadow-sm">
+          <img src="[HeroImagePath]" class="card-img object-fit-cover" alt="[HeroImageAlt]">
+          <div class="card-img-overlay d-flex flex-column p-0">
+            <div class="mt-auto p-3 p-md-4 bg-dark bg-opacity-75 text-white">
+              <div class="fw-semibold text-truncate">[OverlayTitle]</div>
+              <div class="small opacity-75 text-truncate">[OverlaySubtitle]</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+```
+
+### 7.3 Entity Card, Form & Pagination Patterns
+
+```html
+<!-- Entity Card -->
+<article class="card bg-body-tertiary border shadow-sm h-100">
+  <div class="card-body vstack gap-3">
+    <div class="hstack gap-3 align-items-center">
+      <div class="rounded-3 bg-primary-subtle text-primary-emphasis p-2 fw-bold">[Icon]</div>
+      <div class="vstack gap-1 overflow-hidden">
+        <h2 class="h6 fw-semibold mb-0 text-truncate">[EntityTitle]</h2>
+        <span class="small text-body-secondary text-truncate">[EntityTimestamp]</span>
+      </div>
+      <span class="ms-auto fw-bold text-primary">[MetricValue]</span>
+    </div>
+    <div class="border-start ps-3 vstack gap-2 small">
+      <div class="text-body">[OriginLabel]</div>
+      <div class="text-body-secondary">[DestinationLabel]</div>
+    </div>
+    <div class="hstack gap-2 justify-content-end mt-auto pt-2">
+      <button type="button" class="btn btn-outline-secondary btn-sm" data-copy-text="[CopyableValue]">Copy</button>
+      <a href="[EntityDetailRoute]" class="btn btn-primary btn-sm">[PrimaryAction]</a>
+    </div>
+  </div>
+</article>
+
+<!-- Validated Form Pattern -->
+<form action="[SubmitRoute]" method="post" class="vstack gap-3" novalidate>
+  <div class="form-floating">
+    <input type="text" name="domain_id" id="domainId" class="form-control focus-ring is-invalid" placeholder="[Placeholder]" required>
+    <label for="domainId">[FieldLabel]</label>
+    <div class="invalid-feedback">[ValidationErrorMessage]</div>
+  </div>
+  <div class="hstack gap-2 justify-content-end mt-2">
+    <a href="[CancelRoute]" class="btn btn-outline-secondary">Cancel</a>
+    <button type="submit" class="btn btn-primary" data-loading-btn>[SubmitAction]</button>
+  </div>
+</form>
+
+<!-- Pagination Pattern -->
+<nav aria-label="Page navigation">
+  <ul class="pagination pagination-sm justify-content-center flex-wrap mb-0">
+    <li class="page-item disabled"><span class="page-link" aria-hidden="true">&laquo;</span></li>
+    <li class="page-item active" aria-current="page"><a class="page-link" href="[Page1Route]">1</a></li>
+    <li class="page-item"><a class="page-link" href="[Page2Route]">2</a></li>
+    <li class="page-item"><a class="page-link" href="[NextRoute]" aria-label="Next">&raquo;</a></li>
+  </ul>
+</nav>
+```
 
 ---
 
-## 8. XSS-Safe, Deterministic Bootstrap 5.3+ JS Controller
-
-* Inline `on*` HTML attributes are **FORBIDDEN**.
-* Mutating `.innerHTML` with dynamic/interpolated strings is **FORBIDDEN** (use `document.createElement()`, `textContent`, and `replaceChildren()`).
-* Silent `catch` blocks are **FORBIDDEN**.
+## 8. Bootstrap 5.3+ JS Controller (XSS-Safe, CSRF-Aware, Zero Fallbacks)
 
 ```javascript
 'use strict';
 
+window.getCSRFToken = () => {
+  const meta = document.querySelector('meta[name="csrf-token"]');
+  if (!(meta instanceof HTMLMetaElement)) {
+    throw new Error('Required meta[name="csrf-token"] element is missing.');
+  }
+  return meta.content;
+};
+
+window.updateCSRFToken = (token) => {
+  if (typeof token !== 'string' || token === '') {
+    throw new Error('CSRF token update requires a non-empty string.');
+  }
+  const meta = document.querySelector('meta[name="csrf-token"]');
+  if (meta instanceof HTMLMetaElement) {
+    meta.content = token;
+  }
+  document.querySelectorAll('input[name="csrf_token"]').forEach((input) => {
+    if (input instanceof HTMLInputElement) {
+      input.value = token;
+    }
+  });
+};
+
 document.addEventListener('DOMContentLoaded', () => {
-  // 1. Initialize Bootstrap Tooltips
   document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach((el) => {
     new bootstrap.Tooltip(el);
   });
 
-  // 2. Deterministic Light/Dark Theme Toggle
   const themeBtn = document.getElementById('themeToggle');
   if (themeBtn instanceof HTMLButtonElement) {
     themeBtn.addEventListener('click', () => {
       const root = document.documentElement;
-      const current = root.getAttribute('data-bs-theme');
-      const next = current === 'dark' ? 'light' : 'dark';
+      const next = root.getAttribute('data-bs-theme') === 'dark' ? 'light' : 'dark';
       root.setAttribute('data-bs-theme', next);
       themeBtn.setAttribute('aria-pressed', next === 'dark' ? 'true' : 'false');
     });
   }
 
-  // 3. Copy Micro-Interaction with Toast Feedback (Zero innerHTML, Zero Silent Swallows)
   const toastEl = document.getElementById('feedbackToast');
   const toastBody = document.getElementById('feedbackToastBody');
   const toast = toastEl instanceof HTMLElement ? new bootstrap.Toast(toastEl, { delay: 2500 }) : null;
@@ -243,7 +454,7 @@ document.addEventListener('DOMContentLoaded', () => {
         throw new Error('Missing non-empty data-copy-text attribute.');
       }
 
-      const originalText = btn.textContent ?? '';
+      const originalLabel = btn.textContent ?? '';
       try {
         await navigator.clipboard.writeText(value);
         btn.classList.remove('btn-outline-secondary');
@@ -262,18 +473,17 @@ document.addEventListener('DOMContentLoaded', () => {
           toastBody.textContent = 'Clipboard permission denied or unavailable.';
           toast.show();
         }
-        console.error('Clipboard write failed:', err);
+        console.error('Clipboard operation failed:', err);
       } finally {
         window.setTimeout(() => {
           btn.classList.remove('btn-success', 'btn-danger');
           btn.classList.add('btn-outline-secondary');
-          btn.textContent = originalText;
+          btn.textContent = originalLabel;
         }, 1800);
       }
     });
   });
 
-  // 4. Deterministic Loading State Helper for Async Submit/Action Buttons
   document.querySelectorAll('[data-loading-btn]').forEach((btn) => {
     if (!(btn instanceof HTMLButtonElement)) {
       return;
@@ -282,30 +492,33 @@ document.addEventListener('DOMContentLoaded', () => {
       if (btn.disabled) {
         return;
       }
-      const originalText = btn.textContent ?? 'Submit';
       const spinner = document.createElement('span');
       spinner.className = 'spinner-border spinner-border-sm me-2';
       spinner.setAttribute('role', 'status');
       spinner.setAttribute('aria-hidden', 'true');
 
+      btn.dataset.originalLabel = btn.textContent ?? 'Submit';
       btn.disabled = true;
       btn.replaceChildren(spinner, document.createTextNode('Processing...'));
-
-      btn.dataset.originalLabel = originalText;
     });
   });
 });
 ```
 
+### Standard Async Envelope Contract
+
+When integrating client-side `fetch()` calls, UI controllers MUST expect and handle:
+`{ "status": "success" | "error" | "validation_error", "message": string, "result": mixed, "errors": object, "csrf_token": string }`, calling `window.updateCSRFToken(payload.csrf_token)` immediately upon response receipt.
+
 ---
 
 ## 9. Pre-Delivery Verification Gate
 
-Every generated interface MUST pass all checks before completion:
+Before marking any UI task complete, verify every item:
 
-1. **HTML5 Landmarks & Nesting:** Uses `<header>`, `<nav>`, `<main>`, `<section>`, `<footer>`; conditional template nesting depth `<= 1`.
-2. **Strict Bootstrap 5.3+ Compliance:** Zero custom CSS component classes, zero inline `style=""`, zero inline `on*` JS handlers, zero external CDN links, zero hardcoded hex colors in HTML.
-3. **Brand Compliance:** Strictly White (`#FFFFFF`/`#F8F9FA`), Black (`#0A0A0D`/`#141419`), Blue (`#0057FF`/`#3B82F6`), with semantic colors reserved strictly for status/validation.
-4. **Dual-Theme Parity:** Both `data-bs-theme="light"` and `data-bs-theme="dark"` render accessible contrast (`>= 4.5:1` body text), muted card borders, and proper surface stepping (`bg-body-tertiary` over `bg-body`).
-5. **Typography & Proximity:** `<= 6` font sizes; `8px` (`gap-2`) coupled pairs; `24px` (`mt-4`) separation before CTA groups; `.text-truncate` on variable-length titles.
-6. **Complete States & XSS Hygiene:** All 5 button states and 5 input states implemented; DOM updates strictly via `textContent`/`replaceChildren()`; zero silent `catch` blocks.
+1. **HTML5 & Template Discipline:** Semantic `<header>`, `<nav>`, `<main>`, `<section>`, `<article>`, `<footer>` landmarks present; conditional view nesting depth `<= 1`.
+2. **Bootstrap 5.3+ Purity:** Zero custom component CSS classes, zero inline `style=""`, zero inline `on*` JS handlers, zero external CDNs, zero hardcoded hex colors in HTML.
+3. **Brand Fidelity:** Strictly White (`#FFFFFF`/`#F8F9FA`), Black (`#0A0A0D`/`#141419`), Blue (`#0057FF`/`#3B82F6`), with semantic hues restricted strictly to status/validation.
+4. **Dual-Theme Parity:** Both `data-bs-theme="light"` and `data-bs-theme="dark"` render legible contrast, muted borders, stepped dark surfaces (`bg-body-tertiary`), and desaturated subtle badges.
+5. **Hierarchy & Edge Cases:** `<= 6` font sizes; 4pt proximity spacing (`gap-2` coupled, `mt-4` before CTAs); `.text-truncate` on variable titles; `.bg-dark.bg-opacity-75` scrims behind overlay text/icons.
+6. **States & XSS Hygiene:** All 5 button states and 5 input states present; DOM writes exclusively via `textContent` / `replaceChildren()`; zero silent `catch` blocks.
